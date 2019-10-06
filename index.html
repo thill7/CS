@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HW1</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <script src="passwords.js"></script>
+</head>
+<body data-spy="scroll" data-target="#eduNav" data-offset="150">
+    <script>
+        $(document).ready(async () => {
+            var cardColumnCount = 2;
+            $("#btnArtFilter").click(() => {
+                $(".filter-btns button").removeClass("active");
+                $("#btnArtFilter").addClass("active");
+                $(".cs-card").hide();
+                $(".art-card").show();
+            });
+            $("#btnCSFilter").click(() => {
+                $(".filter-btns button").removeClass("active");
+                $("#btnCSFilter").addClass("active");
+                $(".art-card").hide();
+                $(".cs-card").show();
+            });
+            $("#btnBothFilter").click(() => {
+                $(".filter-btns button").removeClass("active");
+                $("#btnBothFilter").addClass("active");
+                $(".cs-card").show();
+                $(".art-card").show();
+            });
+            $("#refreshCommitsBtn").click(async () => {
+                $("#refreshCommitsBtn").find("i").css("animation","spin 1s linear infinite");
+                //yes I realize that this is not a good thing to do. I figured it was safe in a private repository though.
+                try {
+                    commits = await getCommits(USERNAME,PASSWORD);
+                    showCommits(commits);
+                }
+                catch(e) {
+                    console.log("no user login info present");
+                }
+                $("#refreshCommitsBtn").find("i").css("animation","none");
+            });
+
+            $("#secretButton").click(() => {
+                window.location.href = "./second_page.html";
+            });
+
+            var cardData = [
+                {
+                    className: 'Fundamentals of Web Design',
+                    classNumber: 'CS195',
+                    cardType: 'cs',
+                    info: `<ul class='list-group'>`
+                    +`<li class='list-group-item list-group-item-primary'>Fundamental web page structure and hyperlinking</li>`
+                    +`<li class='list-group-item list-group-item-primary'>HTML5</li>`
+                    +`<li class='list-group-item list-group-item-primary'>CSS3</li>`
+                    +`<li class='list-group-item list-group-item-primary'>Javascript</li>`
+                    +`</ul>`,
+                    dateTaken: 'Summer 2017'
+                },
+                {
+                    className: 'Computer Science I',
+                    classNumber: 'CS161',
+                    cardType: 'cs',
+                    info: 'Introduction to implementing programming solutions to provided problems in C++.',
+                    dateTaken: 'Spring 2018'
+                },
+                {
+                    className: 'Computer Science II',
+                    classNumber: 'CS162',
+                    cardType: 'cs',
+                    info: `Design and implementation of fundamental data structures with emphasis on object-oriented encapsulation in C++.`,
+                    dateTaken: 'Fall 2018'
+                },
+                {
+                    className: 'Data Structures',
+                    classNumber: 'CS260',
+                    cardType: 'cs',
+                    info: `Examining the merging of Abstract Data Types and the algorithms that manipulate them; introduction to complexity (Big O) analysis and computing resource considerations; multiple implementations including: `
+                    +`<ul class='list-group my-2'>`
+                    +`<li class='list-group-item list-group-item-primary'>searching and sorting algorithms</li>`
+                    +`<li class='list-group-item list-group-item-primary'>stacks</li>`
+                    +`<li class='list-group-item list-group-item-primary'>queues</li>`
+                    +`<li class='list-group-item list-group-item-primary'>lists</li>`
+                    +`<li class='list-group-item list-group-item-primary'>lists</li>`
+                    +`<li class='list-group-item list-group-item-primary'>trees</li>`
+                    +`<li class='list-group-item list-group-item-primary'>graphs</li>`
+                    +`<li class='list-group-item list-group-item-primary'>hash tables</li>`
+                    +`</ul>`
+                    ,
+                    dateTaken: 'Winter 2019'
+                },
+                {
+                    className: 'Computer Organization',
+                    classNumber: 'CS271',
+                    cardType: 'cs',
+                    info: 'Logical organization and boolean logic circuits; introduction to assembly and machine language programming on a RISC system.',
+                    dateTaken: 'Fall 2018'
+                },
+                {
+                    className: 'Algorithms',
+                    classNumber: 'CS361',
+                    cardType: 'cs',
+                    info: `A further exploration of algorithms and their relative efficiency, including:`
+                    +`<ul class='list-group my-2'>`
+                    +`<li class='list-group-item list-group-item-primary'>searching</li>`
+                    +`<li class='list-group-item list-group-item-primary'>advanced sorting</li>`
+                    +`<li class='list-group-item list-group-item-primary'>graphs</li>`
+                    +`<li class='list-group-item list-group-item-primary'>string matching</li>`
+                    +`</ul>`
+                    +`development of algorithm design strategies such as:`
+                    +`<ul class='list-group my-2'>`
+                    +`<li class='list-group-item list-group-item-primary'>divide and conquer</li>`
+                    +`<li class='list-group-item list-group-item-primary'>dynamic programming</li>`
+                    +`<li class='list-group-item list-group-item-primary'>greedy approaches</li>`
+                    +`<li class='list-group-item list-group-item-primary'>backtracking</li>`
+                    +`</ul>`
+                    ,
+                    dateTaken: 'Spring 2019'
+                },
+                {
+                    className: 'Operating Systems',
+                    classNumber: 'CS365',
+                    cardType: 'cs',
+                    info: `Overview of operating systems as managers of resources and intermediaries between users and hardware; topics include:`
+                    +`<ul class='list-group my-2'>`
+                    +`<li class='list-group-item list-group-item-primary'>task synchronization</li>`
+                    +`<li class='list-group-item list-group-item-primary'>task management</li>`
+                    +`<li class='list-group-item list-group-item-primary'>message handling</li>`
+                    +`<li class='list-group-item list-group-item-primary'>CPU scheduling</li>`
+                    +`<li class='list-group-item list-group-item-primary'>dispatching</li>`
+                    +`</ul>`
+                    ,
+                    dateTaken: 'Winter 2019'
+                },
+                {
+                    className: 'Intro to Typography',
+                    classNumber: 'A220',
+                    cardType: 'art',
+                    info: 'info about A220',
+                    dateTaken: 'Winter 2018'
+                },
+                {
+                    className: 'Digital Art and Photography',
+                    classNumber: 'A262',
+                    cardType: 'art',
+                    info: 'info about A262',
+                    dateTaken: 'Spring 2018'
+                },
+                {
+                    className: 'Interactive Media I',
+                    classNumber: 'A323',
+                    cardType: 'art',
+                    info: 'info about A323',
+                    dateTaken: 'Fall 2018'
+                },
+                {
+                    className: 'Interactive Media II',
+                    classNumber: 'A324',
+                    cardType: 'art',
+                    info: 'info about A324',
+                    dateTaken: 'Winter 2019'
+                }
+            ];
+
+            function addCards(holder, cardData, colAmt) {
+                $(holder).empty();
+                var rowIndex = 0;
+                for(let i = 0; i < cardData.length; i++) {
+                    if(i % colAmt == 0) {
+                        $("<div>").addClass("row").appendTo(holder);
+                        rowIndex++;
+                    }
+                    let currentRow = $(holder).children(".row").eq(rowIndex-1);
+                    $("<div>")
+                    .addClass("col-md-"+(12/colAmt))
+                    .addClass(cardData[i].cardType+"-card")
+                    .html(
+                        `<div class='card ${(cardData[i].cardType == 'cs' ? 'bg-primary' : 'bg-success')} my-3'>`
+                        +`<div class='card-header'>`
+                        +`<h5>${cardData[i].classNumber}</h5>`
+                        +`<h6>${cardData[i].className}</h6>`
+                        +`</div>`
+                        +`<div class='card-body'>`
+                        +`<button class='btn btn-block btn-dark' data-toggle='collapse' data-target='#card${cardData[i].classNumber}info'>`
+                        +`Details`
+                        +`</button>`
+                        +`<div class='card bg-info collapse p-2' id='card${cardData[i].classNumber}info'>`
+                        +cardData[i].info
+                        +`</div>`
+                        +`</div>`
+                        +`<div class='card-footer'>`
+                        +`<p class='text-right'>${cardData[i].dateTaken}</p>`
+                        +`</div>`
+                    )
+                    .appendTo(currentRow);
+                }
+            }
+
+            function filterCards() {
+                $(".filter-btns button").each((i, button) => {
+                    if($(button).hasClass("active")) {
+                        if($(button).attr("id") == "btnArtFilter") {
+                            $(".cs-card").hide();
+                            $(".art-card").show();
+                        }
+                        else if($(button).attr("id") == "btnCSFilter") {
+                            $(".art-card").hide();
+                            $(".cs-card").show();
+                        }
+                        else if($(button).attr("id") == "btnBothFilter") {
+                            $(".art-card").show();
+                            $(".cs-card").show();
+                        }
+                    }
+                });
+            }
+
+            function getUserInfo(username) {
+                return new Promise((resolve,reject) => {
+                    $.ajax({
+                        url: "https://api.github.com/users/"+username,
+                        dataType: 'json',
+                        success: (data) => {
+                            resolve(data);
+                        },
+                        error: (jqXHR, textStatus) => {
+                            reject(textStatus);
+                        }
+                    });
+                });   
+            }
+
+            function setUserDisplay(userData) {
+                $("<div>").attr({
+                    "class":"card bg-dark my-3"
+                })
+                .html(
+                `<div class='card-header'>`
+                +`<h3 class='display-4'><a href='${userData.html_url}' target='_blank'>${userData.login}</a></h3>`
+                +`<p class='lead'><span class='font-weight-bold'>Bio</span>: `
+                +userData.bio
+                +`</div>`
+                +`</div>`
+                +`<div class='card-body'>`
+                +`<table class='table table-dark'>`
+                +`<tr>`
+                +`<td class='font-weight-bold'>Location</td>`
+                +`<td>${userData.location}</td>`
+                +`</tr>`
+                +`<tr>`
+                +`<td class='font-weight-bold'>Public Repos</td>`
+                +`<td>${userData.public_repos}</td>`
+                +`</tr>`
+                +`<tr>`
+                +`<td class='font-weight-bold'>Hireable</td>`
+                +`<td>${userData.hireable ? "<i class='fas fa-check'></i>" : "<i class='fas fa-times'></i>"}</td>`
+                +`</tr>`
+                +`</table>`
+                +`</div>`
+                +`</div>`
+                ).appendTo("#userInfoHolder");
+            }
+
+            addCards($("#classCards"),cardData,2);
+
+            $("#columnSlider").on("input",() => {
+                let newValue = $("#columnSlider").val();
+                $("#columnCount").text(newValue);
+                $(".cs-card, .art-card").removeClass("col-md-"+cardColumnCount);
+                cardColumnCount = newValue;
+                $(".cs-card, .art-card").addClass("col-md-"+cardColumnCount);
+                addCards($("#classCards"),cardData,cardColumnCount);
+                filterCards();
+            });
+
+            function getCommits(username,password) {
+                return new Promise((resolve,reject) => {
+                    $.ajax({
+                        url:"https://api.github.com/repos/wou-cs/CS460-F19-thill7/commits",
+                        dataType: 'json',
+                        beforeSend: (xhr) => {
+                            xhr.setRequestHeader("Authorization", "Basic " + btoa(username + ":" + password));
+                        },
+                        success: (data) => {
+                            resolve(data);
+                        },
+                        error(jqXHR,textStatus) {
+                            reject(textStatus);
+                        }
+                    });
+                });
+            }
+
+            function showCommits(commits) {
+                $("#commitHolder").empty();
+                var rowIndex = 0;
+                var colAmt = 2;
+                for(let i = 0; i < commits.length; i++) {
+                    if(i % colAmt == 0) {
+                        $("<div>").addClass("row").appendTo("#commitHolder");
+                        rowIndex++;
+                    }
+                    let currentRow = $("#commitHolder").children(".row").eq(rowIndex-1);
+                    $("<div>")
+                    .addClass("col-md-"+(12/colAmt))
+                    .html(
+                        `<div class='card bg-dark my-3'>`
+                        +`<div class='card-header'>`
+                        +`<h3>repo: /wou-cs/CS460-F19-thill7/</h3>`
+                        +`</div>`
+                        +`<div class='card-body'>`
+                        +`<div class='row'>`
+                        +`<div class='col-9'>`
+                        +`<dl>`
+                        +`<dt>`
+                        +`<h3><span class='text-info'>Commiter</span>: <a href='${commits[i].author.html_url}'>${commits[i].commit.committer.name}</a></h3>`
+                        +`</dt>`
+                        +`<dd>`
+                        +`<p class='py-2'><span class='text-info text-lead'>Message</span>: ${commits[i].commit.message}</p>`
+                        +`</dd>`
+                        +`</dl>`
+                        +`</div>`
+                        +`<div class='col-3'>`
+                        +`<img src='${commits[i].author.avatar_url}' class='img-fluid img-thumbnail mx-auto d-block' />`
+                        +`</div>`
+                        +`</div>`
+                        +`</div>`
+                        +`<div class='card-footer'>`
+                        +`<p class='text-right'>${commits[i].commit.author.date}</p>`
+                        +`</div>`
+                    )
+                    .appendTo(currentRow);
+                }
+            }
+            //yes I realize that this is not a good thing to do. I figured it was safe in a private repository though.
+            try {
+                var commits = await getCommits(USERNAME,PASSWORD);
+            showCommits(commits);
+            }
+            catch(e) {
+                console.log("no user login info present");
+            }
+            setUserDisplay(await getUserInfo('thill7'));
+        });
+
+        
+    </script>
+
+    <ul class="nav nav-tabs justify-content-center bg-primary text-white">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#home">Home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#education">Education</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#work">Work Experience</a>
+        </li>
+    </ul>
+    
+    <div class="tab-content text-white">
+        <div class="tab-pane active" id="home">
+            <!-- Home tab-->
+            <div class="jumbotron bg-dark rounded-0">
+                <h1 class="display-3 d-inline">Tanner Hill</h1>
+                <p class="lead">Senior Computer Science Student</p>
+                <h4><span class="wou-red">Western Oregon University</span> (2017 - 2020)</h4>
+                <h5>Computer Science BS*</h5>
+                <p class="small">*in progress (expected graduation date Spring 2020)</p>
+                <button id="secretButton" class="btn btn-info d-inline">Secret Page!</button>
+            </div>
+            <div class="card bg-primary">
+                <div class="card-header">
+                    <h3 class="display-4 d-inline">Github</h3>
+                    <button class="btn btn-info float-right d-inline" id="refreshCommitsBtn"><i class='fas fa-sync p-1'></i></button>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md" id="userInfoHolder">
+                        
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md" id="commitHolder">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane container-fluid px-0" id="education">
+            <!-- Edu tab-->
+            <div class="jumbotron bg-dark">
+                <h3 class="display-3">Education</h3>
+                <p class="lead">Major: <span class="font-weight-bolder">Computer Science</span>/ Minor: <span class="font-weight-bolder">Art and Design</span></p>
+                <h4><span class="wou-red">Western Oregon University</span> (2017 - 2020)</h4> 
+            </div>
+            <nav class="navbar navbar-expand-lg navbar-dark bg-info sticky-top rounded-0">
+                <button class="navbar-toggler" data-target="#eduNav" data-toggle="collapse" aria-controls="my-nav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div id="eduNav" class="collapse navbar-collapse">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#courseworkSection">Coursework<span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#commendationSection">Commendations</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#languageSection">Languages</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="card bg-dark" id="courseworkSection">
+                <div class="card-header">
+                    <h3 class="display-3">Coursework</h3>
+                    <div class="input-group my-3">
+                        <div class="input-group-prepend filter-btns" role="group" aria-label="Button group">
+                            <button class="btn btn-danger active" id="btnBothFilter">Both</button>
+                            <button class="btn btn-primary" id="btnCSFilter">Computer Science</button>
+                            <button class="btn btn-success" id="btnArtFilter">Art and Design</button>
+                        </div>
+                        <div class="input-group-prepend" id="columnSliderLabel">
+                            <span class="input-group-text">Columns</span>
+                        </div>
+                        <input type="range" min="1" max="4" value="2" class="form-control" id="columnSlider" />
+                        <div class="input-group-append" id="columnSliderCount">
+                            <span class="input-group-text" id="columnCount">2</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body" id="classCards">
+                    
+                </div>
+            </div>
+            <div class="card bg-dark" id="commendationSection">
+                <div class="card-header">
+                    <h3 class="display-3">Commendations</h3>
+                </div>
+                <div class="card-body">
+                    <p class="lead"><span class="font-weight-bold">Academic Honor Roll</span>: Fall 2017 - Current</p>
+                </div>
+            </div>
+            <div class="card bg-dark" id="languageSection">
+                <div class="card-header">
+                    <h3 class="display-3">Languages (by experience)</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table table-dark">
+                        <thead>
+                            <tr>
+                                <th>Language</th>
+                                <th>Coursework</th>
+                                <th>Self-Taught</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="thead-dark">
+                                    JavaScript (JQuery)
+                                </td>
+                                <td><i class='fas fa-check'></i></td>
+                                <td><i class='fas fa-check'></i></td>
+                            </tr>
+                            <tr>
+                                <td class="thead-dark">
+                                    NodeJS
+                                </td>
+                                <td></td>
+                                <td><i class='fas fa-check'></i></td>
+                            </tr>
+                            <tr>
+                                <td class="thead-dark">
+                                    C++
+                                </td>
+                                <td><i class='fas fa-check'></i></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="thead-dark">
+                                    HTML5
+                                </td>
+                                <td><i class='fas fa-check'></i></td>
+                                <td><i class='fas fa-check'></i></td>
+                            </tr>
+                            <tr>
+                                <td class="thead-dark">
+                                    Java
+                                </td>
+                                <td><i class='fas fa-check'></i></td>
+                                <td><i class='fas fa-check'></i></td>
+                            </tr>
+                            <tr>
+                                <td class="thead-dark">
+                                    SQL
+                                </td>
+                                <td><i class='fas fa-check'></i></td>
+                                <td><i class='fas fa-check'></i></td>
+                            </tr>
+                            <tr>
+                                <td class="thead-dark">
+                                    CSS
+                                </td>
+                                <td><i class='fas fa-check'></i></td>
+                                <td><i class='fas fa-check'></i></td>
+                            </tr>
+                            <tr>
+                                <td class="thead-dark">
+                                    C#
+                                </td>
+                                <td><i class='fas fa-check'></i></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="thead-dark">
+                                    C
+                                </td>
+                                <td><i class='fas fa-check'></i></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="work">
+            <!-- work tab -->
+            <div class="jumbotron bg-dark">
+                <h3 class="display-3">Professional Work Experience</h3>
+                <p class="lead">Paid Positions</p>
+            </div>
+            <div class="card bg-success">
+                <div class="card-header">
+                    <h3 class="display-4">Starbucks Coffee Co.</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md">
+                            <h4 class="my-2">Relevant Skills:</h4>
+                            <ul class="list-group">
+                                <li class="list-group-item bg-dark">Customer Engagement</li>
+                                <li class="list-group-item bg-dark">Teamwork</li>
+                                <li class="list-group-item bg-dark">Task Prioritization</li>
+                            </ul>
+                        </div>
+                        <div class="col-md">
+                            <h4 class="my-2">Commendations:</h4>
+                            <ul class="list-group">
+                                <li class="list-group-item bg-dark">Partner of the Quarter (*2)</li>
+                                <li class="list-group-item bg-dark">Certified Trainer</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <h4 class="my-2">Contact Information:</h4>
+                    <div class="alert bg-dark">
+                        <p class="lead">425 SW Madison Ave, Corvallis, OR 97333</p>
+                    <p class="lead">(800) 996-7566</p>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <p class="lead">February 2014 - Present</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
