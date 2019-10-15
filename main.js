@@ -88,7 +88,7 @@ $(document).ready(async () => {
 		return new Promise((resolve,reject) => {
 			$.ajax({
 				url: "https://api.github.com/users/"+username,
-				dataType: 'jsonp',
+				dataType: 'json',
 				success: (data) => {
 					resolve(data);
 				},
@@ -146,7 +146,7 @@ $(document).ready(async () => {
 		return new Promise((resolve,reject) => {
 			$.ajax({
 				url:"https://api.github.com/repos/wou-cs/CS460-F19-thill7/commits",
-				dataType: 'jsonp',
+				dataType: 'json',
 				beforeSend: (xhr) => {
 					xhr.setRequestHeader("Authorization", "Basic " + btoa(username + ":" + password));
 				},
