@@ -8,7 +8,7 @@ body {
     --text-white: #fff;
     background: var(--background-darkest);
 	width: 100%;
-	overflow-x: none;
+	overflow-x: hidden;
 }
 .wou-red {
     color: var(--wou-red);
