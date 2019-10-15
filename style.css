@@ -33,7 +33,7 @@ body {
     #columnSlider, #columnSliderLabel, #columnSliderCount {
         display:none;
     }
-	.filter-btns button:last-child {
+	.input-group-prepend > .btn:last-child {
 		border-top-right-radius: 0.25rem;
 		border-bottom-right-radius: 0.25rem;
 	}
