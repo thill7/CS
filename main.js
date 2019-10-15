@@ -31,10 +31,6 @@ $(document).ready(async () => {
 		$("#refreshCommitsBtn").find("i").css("animation","none");
 	});
 
-	var cardData = await $.getJSON('classdata.json',(data) => {
-		return data;
-	});
-
 	function addCards(holder, cardData, colAmt) {
 		$(holder).empty();
 		var rowIndex = 0;
@@ -92,7 +88,7 @@ $(document).ready(async () => {
 		return new Promise((resolve,reject) => {
 			$.ajax({
 				url: "https://api.github.com/users/"+username,
-				dataType: 'json',
+				dataType: 'jsonp',
 				success: (data) => {
 					resolve(data);
 				},
@@ -150,7 +146,7 @@ $(document).ready(async () => {
 		return new Promise((resolve,reject) => {
 			$.ajax({
 				url:"https://api.github.com/repos/wou-cs/CS460-F19-thill7/commits",
-				dataType: 'json',
+				dataType: 'jsonp',
 				beforeSend: (xhr) => {
 					xhr.setRequestHeader("Authorization", "Basic " + btoa(username + ":" + password));
 				},
@@ -208,7 +204,7 @@ $(document).ready(async () => {
 	//yes I realize that this is not a good thing to do. I figured it was safe in a private repository though.
 	try {
 		var commits = await getCommits(USERNAME,PASSWORD);
-	showCommits(commits);
+		showCommits(commits);
 	}
 	catch(e) {
 		console.log("no user login info present");
