@@ -106,10 +106,10 @@ var cardData = [
 		cardType: 'art',
 		info: `<p>An introduction to web development from a design perspective. Focuses on visual layout, information architecture, interface design, and graphic artwork for the Internet.</p>`
 		+`<p>Includes extensive practice in front end programming in:</p>`
-		+`<ul class='list-group my-2'`
-		+`<li>HTML5</li>`
-		+`<li>CSS3</li>`
-		+`<li>Javascript/JQuery</li>`
+		+`<ul class='list-group my-2'>`
+		+`<li class='list-group-item list-group-item-primary'>HTML5</li>`
+		+`<li class='list-group-item list-group-item-primary'>CSS3</li>`
+		+`<li class='list-group-item list-group-item-primary'>Javascript/JQuery</li>`
 		+`</ul>`
 		,
 		dateTaken: 'Fall 2018'
@@ -120,10 +120,10 @@ var cardData = [
 		cardType: 'art',
 		info: `<p>A continuation of the work done in A323, with additional focus on intractive user interfaces.</p>`
 		+`<p>Additional work in:</p>`
-		+`<ul class='list-group my-2'`
-		+`<li>HTML5</li>`
-		+`<li>CSS3</li>`
-		+`<li>Javascript/JQuery</li>`
+		+`<ul class='list-group my-2'>`
+		+`<li class='list-group-item list-group-item-primary'>HTML5</li>`
+		+`<li class='list-group-item list-group-item-primary'>CSS3</li>`
+		+`<li class='list-group-item list-group-item-primary'>Javascript/JQuery</li>`
 		+`</ul>`,
 		dateTaken: 'Winter 2019'
 	}
